@@ -51,3 +51,4 @@ rsconnect/
 # R project files
 *.Rproj
 .Rproj.user/
+*.gz
