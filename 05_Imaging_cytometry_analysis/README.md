@@ -1,0 +1,1 @@
+This directory contains scripts and reports used for the global analysis of ImageStream-derived morphological features and PCA analysis across three biological replicates. Input CSV files were obtained from the `ImageStream_processed.tar.gz` archive deposited on Zenodo (DOI: 10.5281/zenodo.18212340).
