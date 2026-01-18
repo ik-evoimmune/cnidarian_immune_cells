@@ -4,7 +4,7 @@ library(tidyverse)
 library(ggplot2)
 library(ggpubr)
 
-setwd("C:/Users/Itamar/OneDrive - huji.ac.il/Documents/Yehu Moran Antiviral Evolution/Imaging cytometry analysis/RLRb imaging CSV files/")
+setwd("~/immune_cells/cnidarian_immune_cells/05_Imaging_cytometry_analysis/input/")
 
 
 RLRb1<- read.csv("RLRb_exp_1.csv", header = T, skip = 1)
@@ -162,24 +162,24 @@ print(pca_plot1)
 pcaData<- readRDS("pcaData.rds")
 percentVar<- readRDS("percentVar.rds")
 # Define custom colors for Conditions
-custom_colors <- c("RLRb_low" = "cyan", "RLRb_high" = "magenta") # Replace with actual condition names
+custom_colors <- c("RLRb_low" = "cyan", "RLRb_high" = "magenta") 
 
 # Create PCA plot
 pca_plot2 <- ggplot(pcaData, aes(x = PC1, y = PC2, label = rownames(pcaData), color = Condition)) +
-  geom_point(size = 4, shape = 16) +                            # Plot PCA points with larger size
-  scale_color_manual(values = custom_colors) +                  # Apply custom colors
+  geom_point(size = 4, shape = 16) +                            
+  scale_color_manual(values = custom_colors) +                
   labs(
     x = paste0("PC1: ", percentVar[1], "% variance"),
     y = paste0("PC2: ", percentVar[2], "% variance"),
     title = "Transcriptomic Data",
-    color = "Condition"                                          # Add legend title
+    color = "Condition"                                          
   ) +
-  theme_minimal(base_size = 14) +                               # Use larger base font
+  theme_minimal(base_size = 14) +                               
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold"),      # Center and bold title
-    axis.title = element_text(face = "bold"),                  # Bold axis labels
-    legend.position = "right",                                 # Place legend on the right
-    legend.title = element_text(face = "bold")                 # Bold legend title
+    plot.title = element_text(hjust = 0.5, face = "bold"),      
+    axis.title = element_text(face = "bold"),                  
+    legend.position = "right",                                 
+    legend.title = element_text(face = "bold")                 
   )
 
 # Display the plot
@@ -260,7 +260,7 @@ my_comparisons <- list( c("IgG", "RLRb"))
 
 
 P<- ggplot(Area_dat, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
   stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
   # Add standard deviation error bars
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
@@ -270,16 +270,16 @@ P<- ggplot(Area_dat, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 80, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 80, size = 8, 
+    vjust = 0.5,
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Area") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)               
   ) 
 
 # Circularity median from software MO2
@@ -298,9 +298,8 @@ summary_data <- circularity_dat_M02 %>%
 
 
 P1<- ggplot(circularity_dat_M02, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -310,15 +309,15 @@ P1<- ggplot(circularity_dat_M02, aes(x = Ab, y = value, color = Ab)) +
     comparisons = my_comparisons,
     label = "p.signif",
     method = "t.test", method.args = list(alternative = "two.sided") , label.y = 11, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Circularity index") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)                
   ) 
 
 # Granularity (intensity ch06)
@@ -334,9 +333,8 @@ summary_data <- Intensity_dat_ch06 %>%
   )
 
 P2<- ggplot(Intensity_dat_ch06, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -345,16 +343,16 @@ P2<- ggplot(Intensity_dat_ch06, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 120000, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 120000, size = 8, 
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Granularity") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),              
+    axis.text.y = element_text(size = 12)                
   ) 
 
 #Intensity ch02 
@@ -370,9 +368,8 @@ summary_data <- Intensity_dat_ch02 %>%
   )
 
 P3<- ggplot(Intensity_dat_ch02, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -381,16 +378,16 @@ P3<- ggplot(Intensity_dat_ch02, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 110000, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 110000, size = 8, 
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Alexa fluor 488") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)                
   ) 
 
 
@@ -399,12 +396,12 @@ library(patchwork)
 # Combined plot 
 # Combine the plots into a 2x2 grid with labels
 combined_plot <- (P + P1) / (P2 + P3) +
-  plot_annotation(tag_levels = 'A') # Automatically label plots with A, B, C, D
+  plot_annotation(tag_levels = 'A') 
 
 # Combine the plots into a single row with labels
 combined_plot <- P + P1 + P2 + P3 +
-  plot_layout(ncol = 4) +          # Arrange in 1 row (4 columns)
-  plot_annotation(tag_levels = 'A') # Automatically label plots with A, B, C, D
+  plot_layout(ncol = 4) +          
+  plot_annotation(tag_levels = 'A') 
 
 print(combined_plot)
 

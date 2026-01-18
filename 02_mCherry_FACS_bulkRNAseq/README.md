@@ -8,14 +8,13 @@ Each section provides placeholders for commands, parameters, and notes to ensure
 ## Table of Contents
 
 1.  [1. SRA Toolkit]
-2.  [Renaming FASTQ Files](#2-renaming-fastq-files)
-3.  [FastQC](#3-fastqc)
-4.  [MultiQC](#4-multiqc)
-5.  [Trimmomatic](#5-trimmomatic)
-6.  [STAR Alignment](#6-star-alignment)
-7.  [featureCounts](#7-featurecounts)
-8.  [Downstream Analysis in R](#8-downstream-analysis-in-r)
-9.  [Summary and File Structure](#9-summary-and-file-structure)
+2.  [2. QC using FASTQC]
+3.  [3. Summarizing the results using multiqc]
+4.  [Trimmomatic](#5-trimmomatic)
+5.  [STAR Alignment](#6-star-alignment)
+6.  [featureCounts](#7-featurecounts)
+7.  [Downstream Analysis in R](#8-downstream-analysis-in-r)
+8.  [Summary and File Structure](#9-summary-and-file-structure)
 
 ------------------------------------------------------------------------
 
@@ -48,10 +47,47 @@ while read -r SRA_ID; do
 done < sra_list.txt
 ```
 
-## 2. Renaming FASTQ files
+## 2. QC using FASTQC
 
-This command will rename the files according to their mCherry status (e.g. neg1 = mCherry negative cells replicate 1; pos2 = mCherry positive cells replicate 2 etc.)
+This script will preform quality check on the raw fastq files. The output will be save into a folder called QC.
 
 ```{bash}
+#!/bin/bash
+#SBATCH -c 8
+#SBATCH --mem-per-cpu 2000
+#SBATCH --time=3:00:00
+#SBATCH -J fastqc
+#SBATCH -o FastQC.%A.out
+#SBATCH -e FastQC.%A.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=<your.email@domain.com>
+
+mkdir -p QC  # Create the QC directory if it doesn't already exist
+for file in *.fastq
+do
+  fastqc -o QC $file
+done
+
+```
+
+## 3. Summarizing the results using multiqc {data-link="1. SRA Toolkit"}
+
+```{bash}
+#!/bin/bash
+#SBATCH -c 8
+#SBATCH --mem-per-cpu 2000
+#SBATCH --time=3:00:00
+#SBATCH -J multiqc
+#SBATCH -o multiQC.%A.out
+#SBATCH -e multiQC.%A.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=<your.email@domain.com>
+
+eval "$(/path/to/your/miniconda3/bin/conda shell.zsh hook)"
+
+conda activate multiqc
+
+
+multiqc .
 
 ```

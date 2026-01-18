@@ -1,6 +1,6 @@
 ## Data availability
 
-All processed ImageStream flow cytometry data used in this analysis are publicly available from the :contentReference[oaicite:0]{index=0} repository under the DOI:  
+All processed ImageStream flow cytometry data used in this analysis are publicly available from the following Zenodo repository under the DOI:  
 **https://doi.org/10.5281/zenodo.18212340**.
 
 The processed single-cell feature tables used for downstream analysis (CSV format) are included within the archive  
@@ -13,13 +13,13 @@ This script performs a global quantitative analysis of individual morphological 
 To assess global patterns in cellular morphology and fluorescence intensity, principal component analysis (PCA) was performed on scaled feature values. Cells were additionally stratified based on RLRb fluorescence intensity to compare the top 15% of RLRb-expressing cells with the remaining population. PCA results were visualized to evaluate differences in multivariate feature space between groups and across biological replicates.
 
 
-``` r
+``` r        
 # PCA analysis  -----------------------------------------------------------
 library(tidyverse)
 library(ggplot2)
 library(ggpubr)
 
-setwd("C:/Users/Itamar/OneDrive - huji.ac.il/Documents/Yehu Moran Antiviral Evolution/Imaging cytometry analysis/RLRb imaging CSV files/")
+setwd("~/immune_cells/cnidarian_immune_cells/05_Imaging_cytometry_analysis/input/")
 
 
 RLRb1<- read.csv("RLRb_exp_1.csv", header = T, skip = 1)
@@ -54,17 +54,11 @@ IgG3$replicate<- 3
 
 combined.rlrb<- rbind(RLRb1,RLRb2,RLRb3)
 dim(combined.rlrb)
-```
 
-```
 ## [1] 39325   106
-```
 
-``` r
 colnames(combined.rlrb)
-```
 
-```
 ##   [1] "Object.Number"                            
 ##   [2] "Area_M02"                                 
 ##   [3] "Area_M06"                                 
@@ -171,21 +165,15 @@ colnames(combined.rlrb)
 ## [104] "Circularity_Object.M01.Ch01.Tight."       
 ## [105] "status"                                   
 ## [106] "replicate"
-```
 
-``` r
 #1: Split into top 15% vs the rest
 threshold <- quantile(combined.rlrb$Intensity_MC_Ch02, 0.85) # Top 15% threshold
 df <- combined.rlrb %>%
   mutate(Group = ifelse(Intensity_MC_Ch02 >= threshold, "Top 15%", "Rest"))
 dim(df)
-```
 
-```
 ## [1] 39325   107
-```
 
-``` r
 #2: Select numeric data and remove zero-variance columns
 # Ensure `Group` is retained for alignment
 numeric_data <- df %>%
@@ -213,9 +201,9 @@ ggplot(pca_df, aes(x = PC1, y = PC2, color = Group)) +
   geom_jitter(width = 0.1, height = 0.1, alpha = 0.5, size = 2)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-1.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-``` r
+```         
 # Show only the centroids representing each of the replicates 
 
 #1: Split data into Top 15% vs Rest for each status
@@ -231,9 +219,7 @@ numeric_data <- df_split %>%
   select( -Intensity_MC_Ch02, -replicate, -Object.Number) %>% na.omit() %>% 
   select(Group, status, where(~ is.numeric(.) && var(.) > 0.01))
 colnames(numeric_data)
-```
 
-```
 ##  [1] "Group"                                    
 ##  [2] "status"                                   
 ##  [3] "Area_M02"                                 
@@ -327,9 +313,7 @@ colnames(numeric_data)
 ## [91] "Circularity_Morphology.M02.Ch02.1"        
 ## [92] "Intensity_MC_Ch01"                        
 ## [93] "Circularity_Object.M01.Ch01.Tight."
-```
 
-``` r
 numeric_data_clean <- numeric_data %>%
   ungroup() %>%
   select(-Group, -status)
@@ -337,13 +321,9 @@ numeric_data_clean <- numeric_data %>%
 #3 Standardize the data before PCA
 numeric_data_scaled <- scale(numeric_data_clean)
 dim(numeric_data_clean)
-```
 
-```
 ## [1] 28409    91
-```
 
-``` r
 #4: Perform PCA on the scaled numeric data
 pca_result <- prcomp(numeric_data_scaled, scale. = TRUE)
 
@@ -363,9 +343,9 @@ ggplot() +
   theme_minimal()
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-2.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-2.png)
 
-``` r
+```         
 # Variance explained
 # Extract variance explained
 variances <- pca_result$sdev^2  # squared singular values (standard deviations)
@@ -382,18 +362,15 @@ ggplot() +
   theme_minimal()
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-3.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-3.png)
 
-``` r
+```         
 # Define custom colors
 centroids$Group
-```
 
-```
-## [1] "Rest"    "Rest"    "Rest"    "Top 15%" "Top 15%" "Top 15%"
-```
+## [1] "Rest"    "Rest"    "Rest"    "Top 15%" "Top 15%"
+## [6] "Top 15%"
 
-``` r
 custom_colors <- c("Rest" = "cyan", "Top 15%" = "magenta") 
 
 # Create the plot
@@ -421,40 +398,40 @@ pca_plot1 <- ggplot(data = centroids) +
 print(pca_plot1)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-4.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-4.png)
 
-``` r
+```         
 # PCA for transcriptomic data
 pcaData<- readRDS("pcaData.rds")
 percentVar<- readRDS("percentVar.rds")
 # Define custom colors for Conditions
-custom_colors <- c("RLRb_low" = "cyan", "RLRb_high" = "magenta") # Replace with actual condition names
+custom_colors <- c("RLRb_low" = "cyan", "RLRb_high" = "magenta") 
 
 # Create PCA plot
 pca_plot2 <- ggplot(pcaData, aes(x = PC1, y = PC2, label = rownames(pcaData), color = Condition)) +
-  geom_point(size = 4, shape = 16) +                            # Plot PCA points with larger size
-  scale_color_manual(values = custom_colors) +                  # Apply custom colors
+  geom_point(size = 4, shape = 16) +                            
+  scale_color_manual(values = custom_colors) +                
   labs(
     x = paste0("PC1: ", percentVar[1], "% variance"),
     y = paste0("PC2: ", percentVar[2], "% variance"),
     title = "Transcriptomic Data",
-    color = "Condition"                                          # Add legend title
+    color = "Condition"                                          
   ) +
-  theme_minimal(base_size = 14) +                               # Use larger base font
+  theme_minimal(base_size = 14) +                               
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold"),      # Center and bold title
-    axis.title = element_text(face = "bold"),                  # Bold axis labels
-    legend.position = "right",                                 # Place legend on the right
-    legend.title = element_text(face = "bold")                 # Bold legend title
+    plot.title = element_text(hjust = 0.5, face = "bold"),      
+    axis.title = element_text(face = "bold"),                  
+    legend.position = "right",                                 
+    legend.title = element_text(face = "bold")                 
   )
 
 # Display the plot
 print(pca_plot2)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-5.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-5.png)
 
-``` r
+```         
 # Plot them together in 1 column
 library(patchwork)
 # Combine both PCA plots into one column
@@ -464,9 +441,9 @@ combined_plot <- pca_plot1 / pca_plot2
 print(combined_plot)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-6.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-6.png)
 
-``` r
+```         
 # Extract the loadings
 # Extract PCA loadings (eigenvectors)
 loadings <- pca_result$rotation
@@ -485,23 +462,15 @@ top_features_pc2 <- names(pc2_contrib)[1:20]  # Top 10 features contributing to 
 
 # Print the top features for both PC1 and PC2
 cat("Top 10 features contributing to PC1:\n", top_features_pc1, "\n")
-```
 
-```
 ## Top 10 features contributing to PC1:
 ##  Diameter_M05 Minor.Axis_M05 Width_M02 Width_M05 Area_M02 Raw.Intensity_M05_Ch05 Intensity_MC_Ch05 Area_M01 Area_M05 Thickness.Max_M05 Spot.Area.Min_M05 Height_M02 Area_MC Height_M05 Length_M02 Length_M05 Area_Morphology.M02.Ch02. Area_M06 Width_M06 Thickness.Min_M05
-```
 
-``` r
 cat("Top 10 features contributing to PC2:\n", top_features_pc2, "\n")
-```
 
-```
 ## Top 10 features contributing to PC2:
 ##  Circularity_Morphology.M06.Ch06. Intensity_MC_Ch01 Raw.Max.Pixel_M05_Ch05 Max.Pixel_M05_Ch05 Max.Pixel_MC_Ch05 Spot.Intensity.Min_M05_Ch05 Spot.Intensity.Max_M05_Ch05 Raw.Mean.Pixel_M05_Ch05 Mean.Pixel.Ch05 Bkgd.Mean_Ch05 Modulation_M05_Ch05 Aspect.Ratio.Intensity_M06_Ch06 Gradient.RMS.Ch05 Bkgd.Mean_Ch06 Raw.Median.Pixel_M05_Ch05 Median.Pixel.Ch05 Aspect.Ratio_M06 Raw.Min.Pixel_MC_Ch02 Modulation_M02_Ch02 Gradient.Max_M05_Ch05
-```
 
-``` r
 # Individual plots of IDEAS data --------
 
 # Combine all data 
@@ -510,17 +479,11 @@ combined.data<- rbind(IgG1,IgG2,IgG3,RLRb1,RLRb2,RLRb3)
 
 #Get the median intensity of antibody staining  for each condition 
 dim(combined.data)
-```
 
-```
 ## [1] 82340   106
-```
 
-``` r
 colnames(combined.data)
-```
 
-```
 ##   [1] "Object.Number"                            
 ##   [2] "Area_M02"                                 
 ##   [3] "Area_M06"                                 
@@ -627,9 +590,7 @@ colnames(combined.data)
 ## [104] "Circularity_Object.M01.Ch01.Tight."       
 ## [105] "status"                                   
 ## [106] "replicate"
-```
 
-``` r
 median.intensity <- combined.data |>
   na.omit() |>
   dplyr::filter(Intensity_MC_Ch02 > 0) |>
@@ -641,9 +602,7 @@ median.intensity <- combined.data |>
 
 
 print(median.intensity)
-```
 
-```
 ## # A tibble: 6 × 3
 ##   status replicate median_fluoresence_intensity
 ##   <chr>      <dbl>                        <dbl>
@@ -653,9 +612,7 @@ print(median.intensity)
 ## 4 RLRb1          1                       26209.
 ## 5 RLRb2          2                       37701.
 ## 6 RLRb3          3                       27219.
-```
 
-``` r
 # For the actual comparison I used the statistics computed based on the gating in IDEAS software
 
 #Area median from software MO1 (brightfield)
@@ -663,11 +620,9 @@ print(median.intensity)
 
 Area_dat<- data.frame(Ab = c(rep("IgG",3),rep("RLRb",3)), value = c(66.44,64,62.78,78.44,76.06,76.33))
 t.test(data = Area_dat, value~Ab)
-```
 
-```
 ## 
-## 	Welch Two Sample t-test
+##  Welch Two Sample t-test
 ## 
 ## data:  value by Ab
 ## t = -9.5488, df = 3.5785, p-value = 0.001134
@@ -677,9 +632,7 @@ t.test(data = Area_dat, value~Ab)
 ## sample estimates:
 ##  mean in group IgG mean in group RLRb 
 ##           64.40667           76.94333
-```
 
-``` r
 #p= 001134
 
 library('Hmisc')
@@ -696,7 +649,7 @@ my_comparisons <- list( c("IgG", "RLRb"))
 
 
 P<- ggplot(Area_dat, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
   stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
   # Add standard deviation error bars
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
@@ -706,27 +659,25 @@ P<- ggplot(Area_dat, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 80, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 80, size = 8, 
+    vjust = 0.5,
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Area") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)               
   ) 
 
 # Circularity median from software MO2
 
 circularity_dat_M02<- data.frame(Ab = c(rep("IgG",3),rep("RLRb",3)), value = c(5.367,5.428,8.499,9.577,9.689,9.664))
 t.test(data = circularity_dat_M02, value~Ab)
-```
 
-```
 ## 
-## 	Welch Two Sample t-test
+##  Welch Two Sample t-test
 ## 
 ## data:  value by Ab
 ## t = -3.1048, df = 2.0043, p-value = 0.08972
@@ -736,9 +687,7 @@ t.test(data = circularity_dat_M02, value~Ab)
 ## sample estimates:
 ##  mean in group IgG mean in group RLRb 
 ##           6.431333           9.643333
-```
 
-``` r
 # p=0.08972
 
 summary_data <- circularity_dat_M02 %>%
@@ -750,9 +699,8 @@ summary_data <- circularity_dat_M02 %>%
 
 
 P1<- ggplot(circularity_dat_M02, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -762,26 +710,24 @@ P1<- ggplot(circularity_dat_M02, aes(x = Ab, y = value, color = Ab)) +
     comparisons = my_comparisons,
     label = "p.signif",
     method = "t.test", method.args = list(alternative = "two.sided") , label.y = 11, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Circularity index") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)                
   ) 
 
 # Granularity (intensity ch06)
 
 Intensity_dat_ch06<- data.frame(Ab = c(rep("IgG",3),rep("RLRb",3)), value = c(68183.09,42904.67,39866.03,110784.7,112058.12,82919.7))
 t.test(data = Intensity_dat_ch06, value~Ab)
-```
 
-```
 ## 
-## 	Welch Two Sample t-test
+##  Welch Two Sample t-test
 ## 
 ## data:  value by Ab
 ## t = -3.9467, df = 3.9868, p-value = 0.01697
@@ -791,9 +737,7 @@ t.test(data = Intensity_dat_ch06, value~Ab)
 ## sample estimates:
 ##  mean in group IgG mean in group RLRb 
 ##           50317.93          101920.84
-```
 
-``` r
 summary_data <- Intensity_dat_ch06 %>%
   group_by(Ab) %>%
   summarise(
@@ -802,9 +746,8 @@ summary_data <- Intensity_dat_ch06 %>%
   )
 
 P2<- ggplot(Intensity_dat_ch06, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -813,27 +756,25 @@ P2<- ggplot(Intensity_dat_ch06, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 120000, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 120000, size = 8, 
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Granularity") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),              
+    axis.text.y = element_text(size = 12)                
   ) 
 
 #Intensity ch02 
 
 Intensity_dat_ch02<- data.frame(Ab = c(rep("IgG",3),rep("RLRb",3)), value = c(19467.65,20586.06,21764.43,70420.64,71974.44,104731.19))
 t.test(data = Intensity_dat_ch02, value~Ab)
-```
 
-```
 ## 
-## 	Welch Two Sample t-test
+##  Welch Two Sample t-test
 ## 
 ## data:  value by Ab
 ## t = -5.5119, df = 2.0141, p-value = 0.03089
@@ -843,9 +784,7 @@ t.test(data = Intensity_dat_ch02, value~Ab)
 ## sample estimates:
 ##  mean in group IgG mean in group RLRb 
 ##           20606.05           82375.42
-```
 
-``` r
 summary_data <- Intensity_dat_ch02 %>%
   group_by(Ab) %>%
   summarise(
@@ -854,9 +793,8 @@ summary_data <- Intensity_dat_ch02 %>%
   )
 
 P3<- ggplot(Intensity_dat_ch02, aes(x = Ab, y = value, color = Ab)) +
-  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +  # Show individual points
-  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +  # Add mean line
-  # Add standard deviation error bars
+  geom_point(size = 4, position = position_jitter(width = 0.2), alpha = 0.8) +
+  stat_summary(fun = mean, geom = "crossbar", width = 0.5, color = "black", aes(ymin = ..y.., ymax = ..y..)) +
   geom_errorbar(data = summary_data, aes(y = mean, ymin = mean - sd, ymax = mean + sd), 
                 width = 0.2, color = "black") +  theme_minimal() +
   theme_minimal() +
@@ -865,16 +803,16 @@ P3<- ggplot(Intensity_dat_ch02, aes(x = Ab, y = value, color = Ab)) +
   stat_compare_means(
     comparisons = my_comparisons,
     label = "p.signif",
-    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 110000, size = 8, # Increase size of the asterisks
-    vjust = 0.5, # Adjust vertical alignment of labels
-    tip.length = 0.05 # Adjust line tip length
+    method = "t.test", method.args = list(alternative = "two.sided"), label.y = 110000, size = 8, 
+    vjust = 0.5, 
+    tip.length = 0.05 
   ) + theme(legend.position = "none")  + ylab("Alexa fluor 488") + xlab("") +
   theme(
-    plot.title = element_text(size = 16, face = "bold"),  # Title font size
-    axis.title.x = element_text(size = 14),              # X-axis title font size
-    axis.title.y = element_text(size = 14),              # Y-axis title font size
-    axis.text.x = element_text(size = 12),               # X-axis text font size
-    axis.text.y = element_text(size = 12)                # Y-axis text font size
+    plot.title = element_text(size = 16, face = "bold"),  
+    axis.title.x = element_text(size = 14),              
+    axis.title.y = element_text(size = 14),              
+    axis.text.x = element_text(size = 12),               
+    axis.text.y = element_text(size = 12)                
   ) 
 
 
@@ -883,69 +821,71 @@ library(patchwork)
 # Combined plot 
 # Combine the plots into a 2x2 grid with labels
 combined_plot <- (P + P1) / (P2 + P3) +
-  plot_annotation(tag_levels = 'A') # Automatically label plots with A, B, C, D
+  plot_annotation(tag_levels = 'A') 
 
 # Combine the plots into a single row with labels
 combined_plot <- P + P1 + P2 + P3 +
-  plot_layout(ncol = 4) +          # Arrange in 1 row (4 columns)
-  plot_annotation(tag_levels = 'A') # Automatically label plots with A, B, C, D
+  plot_layout(ncol = 4) +          
+  plot_annotation(tag_levels = 'A') 
 
 print(combined_plot)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-7.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-7.png)
 
-``` r
+```         
 sessionInfo()
-```
 
-```
-## R version 4.5.0 (2025-04-11 ucrt)
-## Platform: x86_64-w64-mingw32/x64
-## Running under: Windows 11 x64 (build 26200)
+## R version 4.4.1 (2024-06-14)
+## Platform: x86_64-pc-linux-gnu
+## Running under: Ubuntu 22.04.5 LTS
 ## 
 ## Matrix products: default
-##   LAPACK version 3.12.1
+## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
 ## 
 ## locale:
-## [1] LC_COLLATE=English_United States.utf8 
-## [2] LC_CTYPE=English_United States.utf8   
-## [3] LC_MONETARY=English_United States.utf8
-## [4] LC_NUMERIC=C                          
-## [5] LC_TIME=English_United States.utf8    
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 ## 
-## time zone: Asia/Jerusalem
-## tzcode source: internal
+## time zone: Etc/UTC
+## tzcode source: system (glibc)
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
 ## 
 ## other attached packages:
-##  [1] Hmisc_5.2-3     patchwork_1.3.0 ggpubr_0.6.1    lubridate_1.9.4
-##  [5] forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4     purrr_1.0.4    
-##  [9] readr_2.1.5     tidyr_1.3.1     tibble_3.3.0    ggplot2_3.5.2  
-## [13] tidyverse_2.0.0 rmarkdown_2.29 
+##  [1] Hmisc_5.2-2     patchwork_1.3.0 ggpubr_0.6.0   
+##  [4] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1  
+##  [7] dplyr_1.1.4     purrr_1.0.2     readr_2.1.5    
+## [10] tidyr_1.3.1     tibble_3.2.1    ggplot2_3.5.1  
+## [13] tidyverse_2.0.0
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] gtable_0.3.6       bslib_0.9.0        xfun_0.52         
-##  [4] htmlwidgets_1.6.4  rstatix_0.7.2      tzdb_0.5.0        
-##  [7] vctrs_0.6.5        tools_4.5.0        generics_0.1.4    
-## [10] cluster_2.1.8.1    pkgconfig_2.0.3    data.table_1.17.4 
-## [13] checkmate_2.3.2    RColorBrewer_1.1-3 lifecycle_1.0.4   
-## [16] compiler_4.5.0     farver_2.1.2       carData_3.0-5     
-## [19] sass_0.4.10        htmltools_0.5.8.1  yaml_2.3.10       
-## [22] htmlTable_2.4.3    Formula_1.2-5      jquerylib_0.1.4   
-## [25] pillar_1.10.2      car_3.1-3          crayon_1.5.3      
-## [28] cachem_1.1.0       rpart_4.1.24       abind_1.4-8       
-## [31] tidyselect_1.2.1   digest_0.6.37      stringi_1.8.7     
-## [34] labeling_0.4.3     fastmap_1.2.0      grid_4.5.0        
-## [37] colorspace_2.1-1   cli_3.6.5          magrittr_2.0.3    
-## [40] base64enc_0.1-3    dichromat_2.0-0.1  utf8_1.2.6        
-## [43] broom_1.0.8        foreign_0.8-90     withr_3.0.2       
-## [46] scales_1.4.0       backports_1.5.0    timechange_0.3.0  
-## [49] nnet_7.3-20        gridExtra_2.3      ggsignif_0.6.4    
-## [52] hms_1.1.3          evaluate_1.0.3     knitr_1.50        
-## [55] rlang_1.1.6        glue_1.8.0         jsonlite_2.0.0    
-## [58] rstudioapi_0.17.1  R6_2.6.1
+##  [1] gtable_0.3.5      bslib_0.8.0       xfun_0.48        
+##  [4] htmlwidgets_1.6.4 rstatix_0.7.2     tzdb_0.4.0       
+##  [7] vctrs_0.6.5       tools_4.4.1       generics_0.1.3   
+## [10] fansi_1.0.6       highr_0.11        cluster_2.1.6    
+## [13] pkgconfig_2.0.3   data.table_1.16.2 checkmate_2.3.2  
+## [16] lifecycle_1.0.4   compiler_4.4.1    farver_2.1.2     
+## [19] munsell_0.5.1     carData_3.0-5     sass_0.4.9       
+## [22] htmltools_0.5.8.1 yaml_2.3.10       htmlTable_2.4.3  
+## [25] Formula_1.2-5     jquerylib_0.1.4   pillar_1.9.0     
+## [28] car_3.1-3         crayon_1.5.3      cachem_1.1.0     
+## [31] rpart_4.1.23      abind_1.4-8       tidyselect_1.2.1 
+## [34] digest_0.6.37     stringi_1.8.4     labeling_0.4.3   
+## [37] fastmap_1.2.0     grid_4.4.1        colorspace_2.1-1 
+## [40] cli_3.6.3         magrittr_2.0.3    base64enc_0.1-3  
+## [43] utf8_1.2.4        broom_1.0.7       foreign_0.8-87   
+## [46] withr_3.0.1       scales_1.3.0      backports_1.5.0  
+## [49] timechange_0.3.0  rmarkdown_2.28    nnet_7.3-19      
+## [52] gridExtra_2.3     ggsignif_0.6.4    hms_1.1.3        
+## [55] evaluate_1.0.1    knitr_1.48        rlang_1.1.4      
+## [58] glue_1.8.0        jsonlite_1.8.9    rstudioapi_0.16.0
+## [61] R6_2.5.1
 ```
-
