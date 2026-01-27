@@ -1,9 +1,16 @@
+## 
+
+---
+title: "Imaging cytometry analysis"
+author: "Itamar Kozlovski"
+date: "2026-01-17"
+---
+
 ## Data availability
 
-All processed ImageStream flow cytometry data used in this analysis are publicly available from the following Zenodo repository under the DOI:  
-**https://doi.org/10.5281/zenodo.18212340**.
+All processed ImageStream flow cytometry data used in this analysis are publicly available from the following Zenodo repository under the [DOI:\\](DOI:\){.uri} [**https://doi.org/10.5281/zenodo.18212340**](https://doi.org/10.5281/zenodo.18212340){.uri}.
 
-The processed single-cell feature tables used for downstream analysis (CSV format) are included within the archive  
+The processed single-cell feature tables used for downstream analysis (CSV format) are included within the archive\
 **`ImageStream_processed.tar.gz`**, which contains all extracted quantitative measurements generated from the ImageStream experiments.
 
 ## Script description
@@ -12,8 +19,7 @@ This script performs a global quantitative analysis of individual morphological 
 
 To assess global patterns in cellular morphology and fluorescence intensity, principal component analysis (PCA) was performed on scaled feature values. Cells were additionally stratified based on RLRb fluorescence intensity to compare the top 15% of RLRb-expressing cells with the remaining population. PCA results were visualized to evaluate differences in multivariate feature space between groups and across biological replicates.
 
-
-``` r        
+``` r
 # PCA analysis  -----------------------------------------------------------
 library(tidyverse)
 library(ggplot2)
@@ -201,7 +207,7 @@ ggplot(pca_df, aes(x = PC1, y = PC2, color = Group)) +
   geom_jitter(width = 0.1, height = 0.1, alpha = 0.5, size = 2)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 ```         
 # Show only the centroids representing each of the replicates 
@@ -343,7 +349,7 @@ ggplot() +
   theme_minimal()
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-2.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-2.png)
 
 ```         
 # Variance explained
@@ -362,7 +368,7 @@ ggplot() +
   theme_minimal()
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-3.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-3.png)
 
 ```         
 # Define custom colors
@@ -398,7 +404,7 @@ pca_plot1 <- ggplot(data = centroids) +
 print(pca_plot1)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-4.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-4.png)
 
 ```         
 # PCA for transcriptomic data
@@ -429,7 +435,7 @@ pca_plot2 <- ggplot(pcaData, aes(x = PC1, y = PC2, label = rownames(pcaData), co
 print(pca_plot2)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-5.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-5.png)
 
 ```         
 # Plot them together in 1 column
@@ -441,7 +447,7 @@ combined_plot <- pca_plot1 / pca_plot2
 print(combined_plot)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-6.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-6.png)
 
 ```         
 # Extract the loadings
@@ -831,7 +837,7 @@ combined_plot <- P + P1 + P2 + P3 +
 print(combined_plot)
 ```
 
-![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-1-7.png)
+![](Imaging_cytometry_analysis_files/figure-markdown_strict/unnamed-chunk-3-7.png)
 
 ```         
 sessionInfo()

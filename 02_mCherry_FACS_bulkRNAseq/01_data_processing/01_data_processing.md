@@ -1,3 +1,9 @@
+---
+title: "RNA-seq Analysis Pipeline"
+author: "Itamar Kozlovski"
+date: "2026-01-15"
+---
+
 # RNA-seq Analysis Pipeline
 
 This document outlines a complete RNA-seq workflow, from raw read download to downstream differential expression and functional enrichment analysis.\

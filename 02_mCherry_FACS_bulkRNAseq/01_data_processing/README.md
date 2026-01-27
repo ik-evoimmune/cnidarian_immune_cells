@@ -24,11 +24,11 @@ This directory contains all steps related to **raw data processing and alignment
 
 The following steps are performed in this directory:
 
-### Data retrieval 
+### Data retrieval
 
 Raw sequencing data are downloaded from public repositories using `download_sra.sh`.
 
-### Read preprocessing 
+### Read preprocessing
 
 Adapter removal and quality trimming of single-end FASTQ files using Trimmomatic (`Trimmomatic.sh`).
 
@@ -36,11 +36,11 @@ Adapter removal and quality trimming of single-end FASTQ files using Trimmomatic
 
 Per-sample quality assessment using FastQC (fastqc_alt.sh) and aggregation of QC metrics using MultiQC (`multiqc.sh`).
 
-### Reference genome preparation 
+### Reference genome preparation
 
 Generation of a STAR genome index using a Nematostella vectensis reference genome augmented with the mCherry reporter sequence (`STAR_Index.sh`).
 
-### Read alignment 
+### Read alignment
 
 Alignment of processed reads to the indexed genome using STAR (`STAR_align.sh`).
 
