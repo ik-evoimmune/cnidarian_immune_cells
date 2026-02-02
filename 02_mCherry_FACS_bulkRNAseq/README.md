@@ -2,6 +2,8 @@
 
 This directory contains the complete bulk RNA-seq analysis workflow for mCherry-sorted cells.
 
+Raw sequencing reads generated for this study are publicly available via the NCBI Sequence Read Archive (SRA) under BioProject accession number **PRJNA1207058**.
+
 ## Directory Overview
 
 -   `01_data_processing/`

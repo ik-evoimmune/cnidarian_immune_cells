@@ -1,0 +1,3 @@
+Batch.Set.ID	mat_fn	genes_fn	cells_fn
+Nvec01	input_Nvec01/matrix.mtx	input_Nvec01/features.tsv	input_Nvec01/barcodes.tsv
+Nvec02	input_Nvec02/matrix.mtx	input_Nvec02/features.tsv	input_Nvec02/barcodes.tsv

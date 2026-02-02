@@ -2,6 +2,8 @@
 
 This directory contains the code used to analyze bulk RNA-seq data generated from FACS-sorted RLRb-high and RLRb-low cells following intracellular immunostaining.
 
+Raw sequencing reads generated for this study are publicly available via the NCBI Sequence Read Archive (SRA) under BioProject accession number **PRJNA1207058**.
+
 ## Directory Overview
 
 -   `01_data_processing/`
