@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+title: "cnidarian_immune_cells"
+message: "If you use this code, please cite the associated publication."
+authors:
+  - family-names: Kozlovski
+    given-names: Itamar
+license: MIT
+repository-code: https://github.com/ik-evoimmune/cnidarian_immune_cells
