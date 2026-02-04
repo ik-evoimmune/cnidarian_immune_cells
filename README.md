@@ -43,10 +43,9 @@ Proteomics analysis workflow based on mass spectrometry data, including statisti
 
 Comparative analyses integrating orthology, bulk RNA-seq, and single-cell results to identify conserved and lineage-specific immune programs.
 
-### 08_phagocytosis
+### 08_flow_cytometry
 
-Analysis of phagocytosis assays across different cell fractions and experimental conditions.\
-This directory contains statistical analyses and visualization scripts used to quantify phagocytic activity and generate the corresponding figures.
+Conventional flow cytometry analyses used to quantify viability, apoptosis, reporter line expression, and phagocytic activity across experimental conditions.
 
 ### 09_supplementary_files
 
@@ -60,8 +59,8 @@ Supplementary annotation tables and reference files used across multiple analyse
 -   Each major analysis directory contains a dedicated `README.md` describing its contents and execution logic.
 -   Rendered reports provide a transparent record of parameters, intermediate steps, and outputs.
 -   Large datasets, intermediate objects, and processed results are deposited on Zenodo and are referenced from the corresponding analysis directories.
--   Raw and processed **single-cell RNA sequencing data** are available via Zenodo (DOI: https://doi.org/10.5281/zenodo.18390360) and are linked from the `03_scRNAseq` directory.
--   **Cytometry data**, including imaging flow cytometry and phagocytosis assay datasets, are deposited in a separate Zenodo repository (DOI: https://doi.org/10.5281/zenodo.18212341) and are linked from the relevant analysis directories.
+-   Raw and processed **single-cell RNA sequencing data** are available via Zenodo (DOI: <https://doi.org/10.5281/zenodo.18390360>) and are linked from the `03_scRNAseq` directory.
+-   **Cytometry data**, including imaging flow cytometry and phagocytosis assay datasets, are deposited in a separate Zenodo repository (DOI: <https://doi.org/10.5281/zenodo.18212341>) and are linked from the relevant analysis directories.
 
 ------------------------------------------------------------------------
 
