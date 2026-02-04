@@ -1,0 +1,31 @@
+Percent,Fraction,Assay
+51.96416265,mCherry_positive,Ovalbumin
+50.48399106,mCherry_positive,Ovalbumin
+30.60145406,mCherry_positive,Ovalbumin
+13.56725146,mCherry_negative,Ovalbumin
+13.75722543,mCherry_negative,Ovalbumin
+5.844921046,mCherry_negative,Ovalbumin
+50.28535193,mCherry_positive,S.aureus
+48.82390337,mCherry_positive,S.aureus
+57.09090909,mCherry_positive,S.aureus
+20.07125891,mCherry_negative,S.aureus
+19.09845789,mCherry_negative,S.aureus
+21.80974478,mCherry_negative,S.aureus
+20.93287827,mCherry_positive,E.coli
+36.70115642,mCherry_positive,E.coli
+40.4494382,mCherry_positive,E.coli
+3.993203059,mCherry_negative,E.coli
+14.49101796,mCherry_negative,E.coli
+13.99026764,mCherry_negative,E.coli
+0.064,WT,Untreated
+0.086,WT,Untreated
+0.058,WT,Untreated
+0.65,RLRb::mCherry uninjected,Untreated
+0.77,RLRb::mCherry uninjected,Untreated
+0.78,RLRb::mCherry uninjected,Untreated
+3.19,RLRb::mCherry NaCl,Untreated
+2.22,RLRb::mCherry NaCl,Untreated
+2.81,RLRb::mCherry NaCl,Untreated
+15.8,RLRb::mCherry pIC,Untreated
+14.8,RLRb::mCherry pIC,Untreated
+15.1,RLRb::mCherry pIC,Untreated
