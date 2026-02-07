@@ -11,17 +11,34 @@ All scRNA-seq input files and processed results required to reproduce or explore
 
 **Zenodo DOI:** <https://doi.org/10.5281/zenodo.18390360>
 
-This includes, but is not limited to: - Seurat objects (`.rds`) - Count matrices and metadata - Intermediate analysis objects - Processed results used for figures and downstream analyses
+This includes, but is not limited to:
+- Seurat objects (`.rds`)
+- Count matrices and metadata
+- Intermediate analysis objects
+- Processed results used for figures and downstream analyses
+
+**ClickTag processing details** are provided with the GEO submission:
+
+**GEO accession:** GSE284212
 
 ## Directory Structure
 
-Typical contents of this folder include: - R scripts for scRNA-seq preprocessing and analysis - Markdown / HTML reports generated from the analysis - Visualization outputs (e.g. PCA, UMAP, clustering plots)
+Typical contents of this folder include:
+- R scripts for scRNA-seq preprocessing and analysis
+- Markdown / HTML reports generated from the analysis
+- Visualization outputs (e.g. PCA, UMAP, clustering plots)
 
 Each script or subdirectory is documented inline or via accompanying README files where relevant.
 
 ## Analysis Overview
 
-The scRNA-seq workflow generally includes: 1. Loading of processed count data 2. Quality control and filtering 3. Normalization and feature selection 4. Dimensionality reduction (PCA, UMAP) 5. Cell clustering and annotation 6. Downstream analyses (e.g. differential expression, module scoring)
+The scRNA-seq workflow generally includes:
+1. Loading of processed count data
+2. Quality control and filtering
+3. Normalization and feature selection
+4. Dimensionality reduction (PCA, UMAP)
+5. Cell clustering and annotation
+6. Downstream analyses (e.g. differential expression, module scoring)
 
 Exact parameters and steps are documented in the scripts and rendered reports.
 
