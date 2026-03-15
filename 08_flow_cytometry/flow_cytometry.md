@@ -112,7 +112,7 @@ p_untreated <- ggbarplot(
 p_untreated
 ```
 
-![](figs/figure-markdown_strict/Read input-1.png)
+![](figs/figure-markdown_strict/fig1.png)
 
 ```         
 # ============================================================
@@ -186,19 +186,19 @@ P3 <- make_assay_plot(df1, assay = "S.aureus", label_y = 60)
 P1
 ```
 
-![](figs/figure-markdown_strict/Read input-2.png)
+![](figs/figure-markdown_strict/fig2.png)
 
 ```         
 P2
 ```
 
-![](figs/figure-markdown_strict/Read input-3.png)
+![](figs/figure-markdown_strict/fig3.png)
 
 ```         
 P3
 ```
 
-![](figs/figure-markdown_strict/Read input-4.png)
+![](figs/figure-markdown_strict/fig4.png)
 
 ```         
 # Apoptosis (Apotracker green) assay --------------------------------------
@@ -272,7 +272,7 @@ paired_plot <- function(dat, ylab, ylim = NULL,
 p_percent$plot; p_percent$ttest
 ```
 
-![](figs/figure-markdown_strict/Plotting function-1.png)
+![](figs/figure-markdown_strict/fig1a.png)
 
 ```         
 ## 
@@ -290,7 +290,7 @@ p_percent$plot; p_percent$ttest
 p_mfi$plot;     p_mfi$ttest
 ```
 
-![](figs/figure-markdown_strict/Plotting function-2.png)
+![](figs/figure-markdown_strict/fig2a.png)
 
 ```         
 ## 
@@ -413,7 +413,7 @@ g <- ggplot(long, aes(group, value)) +
 g
 ```
 
-![](figs/figure-markdown_strict/5. Compact paired plot-1.png)
+![](figs/figure-markdown_strict/fig3a.png)
 
 ```         
 # DRAQ5 -------------------------------------------------------------------
